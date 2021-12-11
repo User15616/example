@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model badges {
+  id           Int       @id
+  userid       Int?
+  name         String?   @db.VarChar(50)
+  creationdate DateTime? @db.Timestamp(6)
+
+  @@index([userid], map: "badges_idx_1")
+}
+
+model comments {
+  id           Int       @id
+  postid       Int
+  score        Int       @default(0)
+  text         String?
+  creationdate DateTime? @db.Timestamp(6)
+  userid       Int
+
+  @@index([postid], map: "comments_idx_1")
+  @@index([userid], map: "comments_idx_2")
+}
+
+model post_history {
+  id                Int       @id
+  posthistorytypeid Int       @db.SmallInt
+  postid            Int
+  revisionguid      String?   @db.VarChar(36)
+  creationdate      DateTime? @db.Timestamp(6)
+  userid            Int
+  text              String?
+
+  @@index([postid], map: "post_history_idx_1")
+  @@index([userid], map: "post_history_idx_2")
+}
+
+model post_links {
+  id            Int       @id
+  creationdate  DateTime? @db.Timestamp(6)
+  postid        Int
+  relatedpostid Int
+  linktypeid    Int
+}
+
+model posts {
+  id               Int       @id
+  posttypeid       Int?      @db.SmallInt
+  acceptedanswerid Int?
+  parentid         Int?
+  score            Int?
+  viewcount        Int?
+  body             String?
+  owneruserid      Int
+  lasteditoruserid Int?
+  lasteditdate     DateTime? @db.Timestamp(6)
+  lastactivitydate DateTime? @db.Timestamp(6)
+  title            String    @db.VarChar(256)
+  tags             String?   @db.VarChar(256)
+  answercount      Int       @default(0)
+  commentcount     Int       @default(0)
+  favoritecount    Int       @default(0)
+  creationdate     DateTime? @db.Timestamp(6)
+
+  @@index([acceptedanswerid], map: "posts_idx_1")
+  @@index([parentid], map: "posts_idx_2")
+  @@index([owneruserid], map: "posts_idx_3")
+  @@index([lasteditoruserid], map: "posts_idx_4")
+}
+
+model users {
+  id             Int       @id
+  reputation     Int
+  creationdate   DateTime? @db.Timestamp(6)
+  displayname    String?   @db.VarChar(50)
+  lastaccessdate DateTime? @db.Timestamp(6)
+  views          Int?      @default(0)
+  websiteurl     String?   @db.VarChar(256)
+  location       String?   @db.VarChar(256)
+  aboutme        String?
+  age            Int?
+  upvotes        Int?
+  downvotes      Int?
+  emailhash      String?   @db.VarChar(32)
+}
+
+model votes {
+  id           Int       @id
+  postid       Int
+  votetypeid   Int?      @db.SmallInt
+  creationdate DateTime? @db.Timestamp(6)
+
+  @@index([postid], map: "votes_idx_1")
+}
