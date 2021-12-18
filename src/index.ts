@@ -1,30 +1,31 @@
-import { PrismaClient } from '@prisma/client'
 
+function fizzBuzz(num: number): string | number {
+    if (num % 3 === 0 && num % 5 === 0) return 'FizzBuzz';
+    if (num % 3 === 0) return 'Fizz';
+    if (num % 5 === 0) return 'Buzz';
 
-const prisma = new PrismaClient()
-
-
-// A `main` function so that you can use async/await
-
-async function main() {
-
-    const usersCount = await prisma.users.count();
-
-    console.dir(`Number of entries in table users is ${usersCount}`);
-
+    return num;
 }
 
 
-main()
+const r1 = fizzBuzz(54);
+const r2 = fizzBuzz(45);
+const r3 = fizzBuzz(45);
 
-    .catch((e) => {
+console.log(r1, r2, r3);
 
-        throw e
+function fn1(i: string) {
+    const o = i + " fn1"
+    return fn2(o);
+}
 
-    })
+function fn2(i: string) {
+    const o = i + " fn2"
+    return fn3(o);
+}
+function fn3(i: string) {
+    return i + ' fn3';
+}
 
-    .finally(async () => {
-
-        await prisma.$disconnect()
-
-    })
+let r = fn1('start');
+console.log(r);
